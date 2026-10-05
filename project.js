@@ -1,4 +1,4 @@
-// 1. Despot some money
+// 1. Deposit some money
 // 2. Determine number of lines to bet on
 // 3. Collect a bet amount
 // 4. Spin the slot machine
@@ -7,6 +7,16 @@
 // 7. play again
 
 const prompt = require("prompt-sync")();
+
+// prompt-sync returns null when the player presses Ctrl+C or input ends.
+const ask = (question) => {
+  const answer = prompt(question);
+  if (answer === null) {
+    console.log("\nGoodbye!");
+    process.exit(0);
+  }
+  return answer;
+};
 
 const ROWS = 3;
 const COLS = 3;
@@ -27,7 +37,7 @@ const SYMBOL_VALUES = {
 
 const deposit = () => {
   while (true) {
-    const depositAmount = prompt("Enter a deposit amount: ");
+    const depositAmount = ask("Enter a deposit amount: ");
     const numberDepositAmount = parseFloat(depositAmount);
 
     if (isNaN(numberDepositAmount) || numberDepositAmount <= 0) {
@@ -40,10 +50,14 @@ const deposit = () => {
 
 const getNumberOfLines = () => {
   while (true) {
-    const lines = prompt("Enter the number of lines to bet on (1-3): ");
-    const numberOfLines = parseFloat(lines);
+    const lines = ask("Enter the number of lines to bet on (1-3): ");
+    const numberOfLines = Number(lines);
 
-    if (isNaN(numberOfLines) || numberOfLines <= 0 || numberOfLines > 3) {
+    if (
+      !Number.isInteger(numberOfLines) ||
+      numberOfLines < 1 ||
+      numberOfLines > ROWS
+    ) {
       console.log("Invalid number of lines, try again.");
     } else {
       return numberOfLines;
@@ -53,7 +67,7 @@ const getNumberOfLines = () => {
 
 const getBet = (balance, lines) => {
   while (true) {
-    const bet = prompt("Enter the bet per line: ");
+    const bet = ask("Enter the bet per line: ");
     const numberBet = parseFloat(bet);
 
     if (isNaN(numberBet) || numberBet <= 0 || numberBet > balance / lines) {
@@ -155,16 +169,14 @@ const game = () => {
       break;
     }
 
-    const playAgain = prompt("Do you want to play again (y/n)? ");
+    const playAgain = ask("Do you want to play again (y/n)? ");
 
-    if (playAgain != "y") break;
+    if (playAgain.trim().toLowerCase() !== "y") break;
   }
 };
 
-game();
+if (require.main === module) {
+  game();
+}
 
-// const balance = deposit()
-// const numberOfLines = getNumberOfLines()
-// const bet = getBet(balance, numberOfLines)
-// const reels = spin()
-// const rows = transpose(reels)
+module.exports = { spin, transpose, getWinnings };
