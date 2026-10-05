@@ -1,13 +1,13 @@
 {
-  "name": "js-projects",
+  "name": "bet-gaming",
   "version": "1.0.0",
-  "description": "",
+  "description": "A command-line slot machine game written in Node.js",
   "license": "ISC",
-  "author": "",
+  "author": "Pankaj",
   "type": "commonjs",
-  "main": "projects.js",
+  "main": "project.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node project.js"
   },
   "dependencies": {
     "prompt-sync": "^4.2.0"
